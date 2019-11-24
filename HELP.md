@@ -1,7 +1,6 @@
-## Dahua PTZ security camera's
+## Foscam PTZ security camera's
 
-This module will allow you to control Dahua and Amcrest PTZ camera's using the Amcrest protocol. See https://support.amcrest.com/hc/en-us/articles/360002010791-Amcrest-HTTP-API-SDK
-Only basic PTZ commands of this API are implemented.
+This module will allow you to control Foscam PTZ camera's. See https://www.foscam.es/descarga/Foscam-IPCamera-CGI-User-Guide-AllPlatforms-2015.11.06.pdf . Only basic PTZ commands of this API are implemented.
 
 ### Configuration
-Set ip-adres and port and password. Password is necessary.
+Set ip-adres and port and password.
