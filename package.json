@@ -1,11 +1,18 @@
 {
   "name": "foscam-ptz",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+	"keywords": [
+		"Camera"
+	],
+	"manufacturer": "foscam",
+	"product": "PTZ Camera",
+	"shortname": "foscam",
+	"description": "Foscam PTZ camera control",
+	"main": "index.js",
+	"author": "Bastiaan Rodenburg <b.rodenburg@gmail.com>",
+  "license": "ISC",
+	"dependencies": {
+		"request": "^2.85.0"
+	}
 }
