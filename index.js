@@ -33,11 +33,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						]
 					}
@@ -51,11 +51,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						]
 					}
@@ -69,11 +69,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						]
 					}
@@ -87,11 +87,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						],
 						default: '0'
@@ -105,11 +105,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						],
 						default: '0'
@@ -123,11 +123,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						],
 						default: '0'
@@ -141,11 +141,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						],
 						default: '0'
@@ -159,11 +159,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' }, 
+							{ id: '4', label: '4 slow' }, 
 							{ id: '-1', label: 'Default speed' } 
 						],
 						default: '0'
@@ -190,11 +190,11 @@ class instance extends instance_skel {
 						label: 'Speed',
 						id: 'speed',
 						choices: [ 
-							{ id: '0', label: '0 slow' }, 
+							{ id: '0', label: '0 fast' }, 
 							{ id: '1', label: '1' }, 
 							{ id: '2', label: '2' }, 
 							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 fast' } 
+							{ id: '4', label: '4 slow' } 
 						],
 						default: '0'
 					}
@@ -207,10 +207,6 @@ class instance extends instance_skel {
 		var self = this;
 		var urlToReq;
 	  
-		if (speed == null || speed == -1) {
-			speed = 0; // this will be the default speed
-		}
-
 		self.log('debug', action);
 
 		// First send required speed
@@ -223,6 +219,7 @@ class instance extends instance_skel {
 		
 				if ((error) || (response.statusCode !== 200) || (body.trim() !== "OK")) {
 					self.log('warn', 'Send Error: ' + error);
+					init();
 					return 0;
 				}
 			});
@@ -242,6 +239,8 @@ class instance extends instance_skel {
 	
 			if ((error) || (response.statusCode !== 200) || (body.trim() !== "OK")) {
 				self.log('warn', 'Send Error: ' + error);
+				// Start init to reconnect to cam because probably network lost
+				self.init();
 			}
 		});
   
@@ -394,7 +393,7 @@ class instance extends instance_skel {
 				self.log('debug', 'Send stop command to camera to test');
 				request(self.BASEURI + '&cmd=ptzStopRun', function (error, response, body) {
     
-					if ((error) || (response.statusCode !== 200) || (body.trim() !== "OK")) {
+					if ((error) || (response.statusCode !== 200)) {
 						self.status(self.STATUS_ERROR, 'Username/password');
 						self.log('warn', "response.statusCode: " + response.statusCode);
 						self.log('warn', "response.statusText: " + response.statusText);
