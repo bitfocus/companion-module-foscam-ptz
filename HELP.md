@@ -4,3 +4,6 @@ This module will allow you to control Foscam PTZ camera's. See https://www.fosca
 
 ### Configuration
 Set ip-adres and port and password.
+
+### URL stream
+Stream to use in OBS: rtsp://your-username:your-password@your-ipaddress:554/videoMain
