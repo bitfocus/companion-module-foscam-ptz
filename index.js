@@ -8,7 +8,7 @@ var instance_speed = -1;
 
 /**
  * Companion instance for Foscam PTZ cameras.
- * @author Bastiaan Rodenburg 
+ * @author Bastiaan Rodenburg
  */
 
 class instance extends instance_skel {
@@ -32,49 +32,49 @@ class instance extends instance_skel {
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						]
 					}
 				],
 				default: '0'
-			 },
+			},
 			'right':          { label: 'Pan Right' ,
 				options: [
 					{
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						]
 					}
 				],
 				default: '0'
-			 },
-			 'up':          { label: 'Tilt up' ,
+			},
+			'up':          { label: 'Tilt up' ,
 				options: [
 					{
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						]
 					}
 				],
@@ -86,13 +86,13 @@ class instance extends instance_skel {
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						],
 						default: '0'
 					}
@@ -104,13 +104,13 @@ class instance extends instance_skel {
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						],
 						default: '0'
 					}
@@ -122,13 +122,13 @@ class instance extends instance_skel {
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						],
 						default: '0'
 					}
@@ -140,13 +140,13 @@ class instance extends instance_skel {
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						],
 						default: '0'
 					}
@@ -158,13 +158,13 @@ class instance extends instance_skel {
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' }, 
-							{ id: '-1', label: 'Default speed' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' }
 						],
 						default: '0'
 					}
@@ -189,12 +189,12 @@ class instance extends instance_skel {
 						type: 'dropdown',
 						label: 'Speed',
 						id: 'speed',
-						choices: [ 
-							{ id: '0', label: '0 fast' }, 
-							{ id: '1', label: '1' }, 
-							{ id: '2', label: '2' }, 
-							{ id: '3', label: '3' }, 
-							{ id: '4', label: '4 slow' } 
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' }
 						],
 						default: '0'
 					}
@@ -206,7 +206,7 @@ class instance extends instance_skel {
 	ptzMove(action,speed = -1, presetname = '') {
 		var self = this;
 		var urlToReq;
-	  
+
 		self.log('debug', action);
 
 		// First send required speed
@@ -216,16 +216,16 @@ class instance extends instance_skel {
 			self.instance_speed = speed;
 
 			request(urlToReq, function (error, response, body) {
-		
+
 				if ((error) || (response.statusCode !== 200) || (body.trim() !== "OK")) {
 					self.log('warn', 'Send Error: ' + error);
-					init();
+					self.init();
 					return 0;
 				}
 			});
-			
+
 		}
-		
+
 		// Next send the command
 		urlToReq = self.BASEURI + '&cmd=' + action;
 
@@ -236,82 +236,75 @@ class instance extends instance_skel {
 		self.log('debug', urlToReq);
 
 		request(urlToReq, function (error, response, body) {
-	
+
 			if ((error) || (response.statusCode !== 200) || (body.trim() !== "OK")) {
 				self.log('warn', 'Send Error: ' + error);
 				// Start init to reconnect to cam because probably network lost
 				self.init();
 			}
 		});
-  
-	  
+
 	}
 
 	action(action) {
 		var self = this;
-		var  cmd;
-		var action;
+		var parameter;
 		var opt = action.options;
 
 		switch (action.action) {
 
 			case 'left':
-				action = 'ptzMoveLeft';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveLeft', opt.speed);
 				break;
 
 			case "right":
-				action = 'ptzMoveRight';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveRight', opt.speed);
 				break;
 
 			case 'up':
-				action = 'ptzMoveUp';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveUp', opt.speed);
 				break;
 
 			case "down":
-				action = 'ptzMoveDown';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveDown', opt.speed);
 				break;
+
 			case 'upleft':
-				action = 'ptzMoveTopLeft';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveTopLeft', opt.speed);
 				break;
 
 			case "upright":
-				action = 'ptzMoveTopRight';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveTopRight', opt.speed);
 				break;
+
 			case 'downleft':
-				action = 'ptzMoveBottomLeft';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveBottomLeft', opt.speed);
 				break;
 
 			case "downright":
-				action = 'ptzMoveBottomRight';
-				self.ptzMove(action, opt.speed);
+				self.ptzMove('ptzMoveBottomRight', opt.speed);
 				break;
-			
+
 			case 'stop':
-				action = 'ptzStopRun';
-				self.ptzMove(action, -1);
+				self.ptzMove('ptzStopRun', -1);
 				break;
+
 			case 'zoomI':
-				action = 'zoomIn';
-				self.ptzMove(action, 0);
+				self.ptzMove('zoomIn', 0);
 				break;
+
 			case 'zoomO':
-				cmd = 'start';
-				action = 'zoomOut';
-				self.ptzMove(action, 0);
+				self.ptzMove('zoomOut', 0);
 				break;
+
 			case 'preset':
-				action = 'ptzGotoPresetPoint';
-				self.ptzMove(action, 0, opt.preset);
+				self.ptzMove('ptzGotoPresetPoint', 0, opt.preset);
+				break;
+
 			case 'setDefaultSpeed':
 				// Only speed of this instance, not send to camera
 				self.instance_speed = opt.speed;
+				break;
 		}
 	}
 
@@ -334,7 +327,7 @@ class instance extends instance_skel {
 				tooltip: 'The Port Number camera.',
 				width:   6,
 				default: 88,
-				regex: self.REGEX_PORT
+				regex:   self.REGEX_PORT
 			},
 			{
 				type:    'textinput',
@@ -342,15 +335,15 @@ class instance extends instance_skel {
 				label:   'User name',
 				tooltip: 'The user name.',
 				width:   6,
-				regex: self.REGEX_SOMETHING
+				regex:   self.REGEX_SOMETHING
 			},
 			{
 				type:    'textinput',
 				id:      'password',
 				label:   'Password',
 				tooltip: 'The password',
-				width:   6,
-				regex: self.REGEX_SOMETHING
+				width:    6,
+				regex:    self.REGEX_SOMETHING
 			}
 		]
 	}
@@ -370,8 +363,8 @@ class instance extends instance_skel {
 		self.status(self.STATUS_WARNING, 'Connecting...');
 
 		// Connecting on init not neccesary for http (request). But during init try to tcp connect
-		// to get the status of the module right and automatically try reconnecting. Which is 
-		// implemented in ../../tcp. 
+		// to get the status of the module right and automatically try reconnecting. Which is
+		// implemented in ../../tcp.
 		if (self.config.host !== undefined) {
 			self.tcp = new tcp(self.config.host, self.config.port);
 
@@ -392,13 +385,13 @@ class instance extends instance_skel {
 				//Try a ptz stop command to be sure username and password are correct and this user is allowed PTZ on this camera
 				self.log('debug', 'Send stop command to camera to test');
 				request(self.BASEURI + '&cmd=ptzStopRun', function (error, response, body) {
-    
+
 					if ((error) || (response.statusCode !== 200)) {
 						self.status(self.STATUS_ERROR, 'Username/password');
 						self.log('warn', "response.statusCode: " + response.statusCode);
 						self.log('warn', "response.statusText: " + response.statusText);
 					}
-				  });
+				});
 			});
 		}
 	}

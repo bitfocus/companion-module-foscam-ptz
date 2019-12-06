@@ -1,7 +1,7 @@
 {
-  "name": "foscam-ptz",
-  "version": "1.0.0",
-  "main": "index.js",
+	"name": "foscam-ptz",
+	"version": "1.0.1",
+	"main": "index.js",
 	"keywords": [
 		"Camera"
 	],
@@ -11,7 +11,7 @@
 	"description": "Foscam PTZ camera control",
 	"main": "index.js",
 	"author": "Bastiaan Rodenburg <b.rodenburg@gmail.com>",
-  "license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"request": "^2.85.0"
 	}
