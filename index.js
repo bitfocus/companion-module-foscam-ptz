@@ -207,8 +207,6 @@ class instance extends instance_skel {
 		var self = this;
 		var urlToReq;
 
-		self.log('debug', action);
-
 		// First send required speed
 		if (action.startsWith('ptzMove') && speed != self.instance_speed) {
 			urlToReq = self.BASEURI + '&cmd=setPTZSpeed&speed=' + speed;
@@ -233,7 +231,7 @@ class instance extends instance_skel {
 			urlToReq = urlToReq + "&name=" + presetname;
 		}
 
-		self.log('debug', urlToReq);
+		//self.log('debug', urlToReq);
 
 		request(urlToReq, function (error, response, body) {
 
