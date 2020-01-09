@@ -214,8 +214,7 @@ class instance extends instance_skel {
 			self.instance_speed = speed;
 
 			request(urlToReq, function (error, response, body) {
-
-				if ((error) || (response.statusCode !== 200) || (body.trim() !== "OK")) {
+				if ((error) || (response.statusCode !== 200)) {
 					self.log('warn', 'Send Error: ' + error);
 					self.init();
 					return 0;
@@ -234,8 +233,7 @@ class instance extends instance_skel {
 		//self.log('debug', urlToReq);
 
 		request(urlToReq, function (error, response, body) {
-
-			if ((error) || (response.statusCode !== 200) || (body.trim() !== "OK")) {
+			if ((error) || (response.statusCode !== 200)) {
 				self.log('warn', 'Send Error: ' + error);
 				// Start init to reconnect to cam because probably network lost
 				self.init();
@@ -376,18 +374,21 @@ class instance extends instance_skel {
 			self.tcp.on('connect', function () {
 				// disconnect immediately because further comm takes place via Request and not
 				// via this tcp sockets.
-				self.tcp.destroy();
-				delete self.tcp;
+				if (self.tcp !== undefined) {
+					self.tcp.destroy();
+					delete self.tcp;
+				}
 				self.BASEURI = 'http://' + self.config.host + ':' + self.config.port + '/cgi-bin/CGIProxy.fcgi?usr=' + self.config.user + '&pwd=' + self.config.password;
 
 				//Try a ptz stop command to be sure username and password are correct and this user is allowed PTZ on this camera
 				self.log('debug', 'Send stop command to camera to test');
 				request(self.BASEURI + '&cmd=ptzStopRun', function (error, response, body) {
-
 					if ((error) || (response.statusCode !== 200)) {
 						self.status(self.STATUS_ERROR, 'Username/password');
 						self.log('warn', "response.statusCode: " + response.statusCode);
 						self.log('warn', "response.statusText: " + response.statusText);
+					} else {
+						self.status(self.STATUS_OK, 'Connected');
 					}
 				});
 			});
