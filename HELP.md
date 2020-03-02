@@ -1,4 +1,4 @@
-## Foscam PTZ security camera's
+## Foscam PTZ security cameras
 
 This module will allow you to control Foscam PTZ cameras.
 
