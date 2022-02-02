@@ -13,5 +13,14 @@
 	"license": "MIT",
 	"dependencies": {
 		"request": "^2.85.0"
-	}
+	},
+	"homepage": "https://github.com/bitfocus/companion-module-foscam-ptz#readme",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-foscam-ptz/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-foscam-ptz.git"
+	},
+	"api_version": "1.0.0"
 }
