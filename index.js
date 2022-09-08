@@ -173,6 +173,7 @@ class instance extends instance_skel {
 			'stop':           { label: 'PTZ Stop' },
 			'zoomI':          { label: 'Zoom In' },
 			'zoomO':          { label: 'Zoom Out' },
+			'zoomStop':       { label: 'Zoom Stop' },			
 			'preset':          { label: 'Goto preset' ,
 				options: [
 					{
@@ -293,6 +294,10 @@ class instance extends instance_skel {
 				self.ptzMove('zoomOut', 0);
 				break;
 
+			case 'zoomStop':
+				self.ptzMove('zoomStop', 0);
+				break;
+				
 			case 'preset':
 				self.ptzMove('ptzGotoPresetPoint', 0, opt.preset);
 				break;
