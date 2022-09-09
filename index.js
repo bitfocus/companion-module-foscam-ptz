@@ -184,6 +184,17 @@ class instance extends instance_skel {
 					}
 				]
 			},
+			'setPreset':          { label: 'Set preset' ,
+				options: [
+					{
+						type: 'textinput',
+						width: 3,
+						label: 'Preset name',
+						id: 'preset'
+					}
+				]
+			},
+			
 			'setDefaultSpeed':          { label: 'Set default speed' ,
 				options: [
 					{
@@ -301,6 +312,10 @@ class instance extends instance_skel {
 			case 'preset':
 				self.ptzMove('ptzGotoPresetPoint', 0, opt.preset);
 				break;
+				
+			case 'setPreset':
+				self.ptzMove('ptzAddPresetPoint', 0, opt.preset);
+				break;				
 
 			case 'setDefaultSpeed':
 				// Only speed of this instance, not send to camera
