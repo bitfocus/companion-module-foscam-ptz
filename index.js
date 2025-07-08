@@ -1,431 +1,436 @@
-var instance_skel = require('../../instance_skel');
-var request = require("request");
-var tcp = require("../../tcp");
-var EventEmitter = require('events').EventEmitter;
-var debug;
-var log;
-var instance_speed = -1;
+const {
+	InstanceBase,
+	InstanceStatus,
+	runEntrypoint,
+	TCPHelper,
+	Regex,
+} = require('@companion-module/base')
+const request = require('request')
 
 /**
  * Companion instance for Foscam PTZ cameras.
  * @author Bastiaan Rodenburg
  */
-
-class instance extends instance_skel {
-
-	constructor(system, id, config) {
-		super(system, id, config);
-		var self = this;
-
-		// Characterworks Port #
-		self.actions();
-		self.BASEURI = "";
+class FoscamPTZInstance extends InstanceBase {
+	constructor(internal) {
+		super(internal)
+		this.instance_speed = -1
+		this.BASEURI = ''
+		this.tcp = null
 	}
 
-	actions(system) {
-		var self = this;
-
-		self.setActions({
-			'left':           { label: 'Pan Left',
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						]
-					}
-				],
-				default: '0'
-			},
-			'right':          { label: 'Pan Right' ,
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						]
-					}
-				],
-				default: '0'
-			},
-			'up':          { label: 'Tilt up' ,
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						]
-					}
-				],
-				default: '0'
-			},
-			'down':          { label: 'Tilt down' ,
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						],
-						default: '0'
-					}
-				]
-			},
-			'upleft':           { label: 'Pan Up/Left',
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						],
-						default: '0'
-					}
-				]
-				},
-			'upright':          { label: 'Pan Up/Right' ,
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						],
-						default: '0'
-					}
-				]
-			},
-			'downleft':           { label: 'Pan Down/Left',
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						],
-						default: '0'
-					}
-				]
-			},
-			'downright':          { label: 'Pan Down/Right' ,
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' },
-							{ id: '-1', label: 'Default speed' }
-						],
-						default: '0'
-					}
-				]
-			},
-			'stop':           { label: 'PTZ Stop' },
-			'zoomI':          { label: 'Zoom In' },
-			'zoomO':          { label: 'Zoom Out' },
-			'zoomStop':       { label: 'Zoom Stop' },			
-			'preset':          { label: 'Goto preset' ,
-				options: [
-					{
-						type: 'textinput',
-						width: 3,
-						label: 'Preset name',
-						id: 'preset'
-					}
-				]
-			},
-			'setPreset':          { label: 'Set preset' ,
-				options: [
-					{
-						type: 'textinput',
-						width: 3,
-						label: 'Preset name',
-						id: 'preset'
-					}
-				]
-			},
-			
-			'setDefaultSpeed':          { label: 'Set default speed' ,
-				options: [
-					{
-						type: 'dropdown',
-						label: 'Speed',
-						id: 'speed',
-						choices: [
-							{ id: '0', label: '0 fast' },
-							{ id: '1', label: '1' },
-							{ id: '2', label: '2' },
-							{ id: '3', label: '3' },
-							{ id: '4', label: '4 slow' }
-						],
-						default: '0'
-					}
-				]
-			},
-		});
+	async init(config) {
+		this.config = config
+		this.updateStatus(InstanceStatus.Connecting, 'Connecting...')
+		this.initActions()
+		await this.initConnection()
 	}
 
-	ptzMove(action,speed = -1, presetname = '') {
-		var self = this;
-		var urlToReq;
-
-		// First send required speed
-		if (action.startsWith('ptzMove') && speed != self.instance_speed) {
-			urlToReq = self.BASEURI + '&cmd=setPTZSpeed&speed=' + speed;
-			self.log('debug', urlToReq);
-			self.instance_speed = speed;
-
-			request(urlToReq, function (error, response, body) {
-				if ((error) || (response.statusCode !== 200)) {
-					self.log('warn', 'Send Error: ' + error);
-					self.init();
-					return 0;
-				}
-			});
-
+	async initConnection() {
+		if (this.tcp) {
+			this.tcp.destroy()
+			this.tcp = null
 		}
 
-		// Next send the command
-		urlToReq = self.BASEURI + '&cmd=' + action;
-
-		if (action == 'ptzGotoPresetPoint') {
-			urlToReq = urlToReq + "&name=" + presetname;
+		if (!this.config.host) {
+			this.updateStatus(InstanceStatus.BadConfig, 'Host not configured')
+			return
 		}
 
-		//self.log('debug', urlToReq);
+		// Use TCPHelper to test connection
+		this.tcp = new TCPHelper(this.config.host, this.config.port || 88)
 
-		request(urlToReq, function (error, response, body) {
-			if ((error) || (response.statusCode !== 200)) {
-				self.log('warn', 'Send Error: ' + error);
-				// Start init to reconnect to cam because probably network lost
-				self.init();
+		this.tcp.on('status_change', (status, message) => {
+			if (status === 'ok') {
+				this.updateStatus(InstanceStatus.Ok, 'Connected')
+			} else if (status === 'connecting') {
+				this.updateStatus(InstanceStatus.Connecting, 'Connecting...')
+			} else if (status === 'disconnected') {
+				this.updateStatus(InstanceStatus.Disconnected, 'Disconnected')
+			} else {
+				this.updateStatus(InstanceStatus.UnknownError, message || 'Unknown error')
 			}
-		});
+		})
 
+		this.tcp.on('error', (err) => {
+			this.log('error', 'TCP Error: ' + err.message)
+		})
+
+		this.tcp.on('connect', () => {
+			// Disconnect immediately as we use HTTP requests for communication
+			if (this.tcp) {
+				this.tcp.destroy()
+				this.tcp = null
+			}
+
+			this.BASEURI = `http://${this.config.host}:${this.config.port || 88}/cgi-bin/CGIProxy.fcgi?usr=${this.config.user}&pwd=${this.config.password}`
+
+			// Test connection with a PTZ stop command
+			this.log('debug', 'Testing connection with stop command')
+			this.makeRequest('ptzStopRun')
+				.then(() => {
+					this.updateStatus(InstanceStatus.Ok, 'Connected')
+				})
+				.catch((err) => {
+					this.updateStatus(InstanceStatus.ConnectionFailure, 'Authentication failed')
+					this.log('warn', 'Authentication test failed: ' + err.message)
+				})
+		})
 	}
 
-	action(action) {
-		var self = this;
-		var parameter;
-		var opt = action.options;
+	makeRequest(cmd, params = {}) {
+		return new Promise((resolve, reject) => {
+			let url = `${this.BASEURI}&cmd=${cmd}`
 
-		switch (action.action) {
+			// Add parameters if provided
+			Object.keys(params).forEach((key) => {
+				url += `&${key}=${encodeURIComponent(params[key])}`
+			})
 
-			case 'left':
-				self.ptzMove('ptzMoveLeft', opt.speed);
-				break;
+			request(url, (error, response, body) => {
+				if (error) {
+					reject(error)
+				} else if (response.statusCode !== 200) {
+					reject(new Error(`HTTP ${response.statusCode}: ${response.statusMessage}`))
+				} else {
+					resolve(body)
+				}
+			})
+		})
+	}
 
-			case "right":
-				self.ptzMove('ptzMoveRight', opt.speed);
-				break;
+	async ptzMove(action, speed = -1, presetname = '') {
+		try {
+			// Set speed if it's a movement command and speed differs
+			if (action.startsWith('ptzMove') && speed != -1 && speed != this.instance_speed) {
+				await this.makeRequest('setPTZSpeed', { speed })
+				this.instance_speed = speed
+			}
 
-			case 'up':
-				self.ptzMove('ptzMoveUp', opt.speed);
-				break;
+			// Execute the movement command
+			const params = {}
+			if (action === 'ptzGotoPresetPoint' && presetname) {
+				params.name = presetname
+			}
 
-			case "down":
-				self.ptzMove('ptzMoveDown', opt.speed);
-				break;
-
-			case 'upleft':
-				self.ptzMove('ptzMoveTopLeft', opt.speed);
-				break;
-
-			case "upright":
-				self.ptzMove('ptzMoveTopRight', opt.speed);
-				break;
-
-			case 'downleft':
-				self.ptzMove('ptzMoveBottomLeft', opt.speed);
-				break;
-
-			case "downright":
-				self.ptzMove('ptzMoveBottomRight', opt.speed);
-				break;
-
-			case 'stop':
-				self.ptzMove('ptzStopRun', -1);
-				break;
-
-			case 'zoomI':
-				self.ptzMove('zoomIn', 0);
-				break;
-
-			case 'zoomO':
-				self.ptzMove('zoomOut', 0);
-				break;
-
-			case 'zoomStop':
-				self.ptzMove('zoomStop', 0);
-				break;
-				
-			case 'preset':
-				self.ptzMove('ptzGotoPresetPoint', 0, opt.preset);
-				break;
-				
-			case 'setPreset':
-				self.ptzMove('ptzAddPresetPoint', 0, opt.preset);
-				break;				
-
-			case 'setDefaultSpeed':
-				// Only speed of this instance, not send to camera
-				self.instance_speed = opt.speed;
-				break;
+			await this.makeRequest(action, params)
+		} catch (error) {
+			this.log('warn', `PTZ command failed: ${error.message}`)
+			// Attempt to reconnect
+			this.initConnection()
 		}
 	}
 
-	// Web config fields
-	config_fields () {
-		var self = this;
+	initActions() {
+		const actions = {
+			left: {
+				name: 'Pan Left',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveLeft', action.options.speed)
+				},
+			},
+			right: {
+				name: 'Pan Right',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveRight', action.options.speed)
+				},
+			},
+			up: {
+				name: 'Tilt Up',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveUp', action.options.speed)
+				},
+			},
+			down: {
+				name: 'Tilt Down',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveDown', action.options.speed)
+				},
+			},
+			upleft: {
+				name: 'Pan Up/Left',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveTopLeft', action.options.speed)
+				},
+			},
+			upright: {
+				name: 'Pan Up/Right',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveTopRight', action.options.speed)
+				},
+			},
+			downleft: {
+				name: 'Pan Down/Left',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveBottomLeft', action.options.speed)
+				},
+			},
+			downright: {
+				name: 'Pan Down/Right',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+							{ id: '-1', label: 'Default speed' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzMoveBottomRight', action.options.speed)
+				},
+			},
+			stop: {
+				name: 'PTZ Stop',
+				options: [],
+				callback: async () => {
+					await this.ptzMove('ptzStopRun', -1)
+				},
+			},
+			zoomI: {
+				name: 'Zoom In',
+				options: [],
+				callback: async () => {
+					await this.ptzMove('zoomIn', 0)
+				},
+			},
+			zoomO: {
+				name: 'Zoom Out',
+				options: [],
+				callback: async () => {
+					await this.ptzMove('zoomOut', 0)
+				},
+			},
+			zoomStop: {
+				name: 'Zoom Stop',
+				options: [],
+				callback: async () => {
+					await this.ptzMove('zoomStop', 0)
+				},
+			},
+			preset: {
+				name: 'Goto Preset',
+				options: [
+					{
+						type: 'textinput',
+						label: 'Preset name',
+						id: 'preset',
+						default: '',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzGotoPresetPoint', 0, action.options.preset)
+				},
+			},
+			setPreset: {
+				name: 'Set Preset',
+				options: [
+					{
+						type: 'textinput',
+						label: 'Preset name',
+						id: 'preset',
+						default: '',
+					},
+				],
+				callback: async (action) => {
+					await this.ptzMove('ptzAddPresetPoint', 0, action.options.preset)
+				},
+			},
+			setDefaultSpeed: {
+				name: 'Set Default Speed',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Speed',
+						id: 'speed',
+						choices: [
+							{ id: '0', label: '0 fast' },
+							{ id: '1', label: '1' },
+							{ id: '2', label: '2' },
+							{ id: '3', label: '3' },
+							{ id: '4', label: '4 slow' },
+						],
+						default: '0',
+					},
+				],
+				callback: async (action) => {
+					this.instance_speed = action.options.speed
+					this.log('info', `Default speed set to ${action.options.speed}`)
+				},
+			},
+		}
+
+		this.setActionDefinitions(actions)
+	}
+
+	getConfigFields() {
 		return [
 			{
-				type:    'textinput',
-				id:      'host',
-				label:   'Foscam IP Address',
-				tooltip: 'The IP of the camera',
-				width:   6,
-				regex:   self.REGEX_IP
+				type: 'textinput',
+				id: 'host',
+				label: 'Foscam IP Address',
+				tooltip: 'The IP address of the camera',
+				width: 6,
+				regex: Regex.IP,
 			},
 			{
-				type:    'textinput',
-				id:      'port',
-				label:   'Foscam Port Number (default 88)',
-				tooltip: 'The Port Number camera.',
-				width:   6,
+				type: 'textinput',
+				id: 'port',
+				label: 'Foscam Port Number (default 88)',
+				tooltip: 'The port number of the camera',
+				width: 6,
 				default: 88,
-				regex:   self.REGEX_PORT
+				regex: Regex.PORT,
 			},
 			{
-				type:    'textinput',
-				id:      'user',
-				label:   'User name',
-				tooltip: 'The user name.',
-				width:   6,
-				regex:   self.REGEX_SOMETHING
+				type: 'textinput',
+				id: 'user',
+				label: 'User name',
+				tooltip: 'The username for authentication',
+				width: 6,
+				regex: Regex.SOMETHING,
 			},
 			{
-				type:    'textinput',
-				id:      'password',
-				label:   'Password',
-				tooltip: 'The password',
-				width:    6,
-				regex:    self.REGEX_SOMETHING
-			}
+				type: 'textinput',
+				id: 'password',
+				label: 'Password',
+				tooltip: 'The password for authentication',
+				width: 6,
+				regex: Regex.SOMETHING,
+			},
 		]
 	}
 
-
-	destroy() {
-		var self = this;
-		debug("destroy");
-	}
-
-	init() {
-		var self = this;
-
-		debug = self.debug;
-		log = self.log;
-
-		self.status(self.STATUS_WARNING, 'Connecting...');
-
-		// Connecting on init not neccesary for http (request). But during init try to tcp connect
-		// to get the status of the module right and automatically try reconnecting. Which is
-		// implemented in ../../tcp.
-		if (self.config.host !== undefined) {
-			self.tcp = new tcp(self.config.host, self.config.port);
-
-			self.tcp.on('status_change', function (status, message) {
-				self.status(status, message);
-			});
-
-			self.tcp.on('error', function () {
-				// Ignore
-			});
-			self.tcp.on('connect', function () {
-				// disconnect immediately because further comm takes place via Request and not
-				// via this tcp sockets.
-				if (self.tcp !== undefined) {
-					self.tcp.destroy();
-					delete self.tcp;
-				}
-				self.BASEURI = 'http://' + self.config.host + ':' + self.config.port + '/cgi-bin/CGIProxy.fcgi?usr=' + self.config.user + '&pwd=' + self.config.password;
-
-				//Try a ptz stop command to be sure username and password are correct and this user is allowed PTZ on this camera
-				self.log('debug', 'Send stop command to camera to test');
-				request(self.BASEURI + '&cmd=ptzStopRun', function (error, response, body) {
-					if ((error) || (response.statusCode !== 200)) {
-						self.status(self.STATUS_ERROR, 'Username/password');
-						self.log('warn', "response.statusCode: " + response.statusCode);
-						self.log('warn', "response.statusText: " + response.statusText);
-					} else {
-						self.status(self.STATUS_OK, 'Connected');
-					}
-				});
-			});
+	async destroy() {
+		if (this.tcp) {
+			this.tcp.destroy()
+			this.tcp = null
 		}
 	}
 
-	updateConfig(config) {
-		var self = this;
-		self.config = config;
-
-		if (self.tcp !== undefined) {
-			self.tcp.destroy();
-			delete self.tcp;
-		}
-
-		self.init();
+	async configUpdated(config) {
+		this.config = config
+		await this.initConnection()
 	}
 }
 
-exports = module.exports = instance;
+runEntrypoint(FoscamPTZInstance, [])

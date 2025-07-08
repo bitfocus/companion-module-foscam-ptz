@@ -1,1 +1,21 @@
-node_modules/ 
+# Companion module packaging
+/pkg
+/pkg.tgz
+
+# Node modules
+node_modules/
+
+# Debug files
+DEBUG-PACKAGED
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

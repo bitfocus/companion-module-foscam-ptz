@@ -1,26 +1,29 @@
 {
 	"name": "foscam-ptz",
-	"version": "1.0.3",
+	"version": "2.0.0",
 	"main": "index.js",
-	"keywords": [
-		"Camera"
-	],
-	"manufacturer": "foscam",
-	"product": "PTZ Camera",
-	"shortname": "foscam",
-	"description": "Foscam PTZ camera control",
-	"author": "Bastiaan Rodenburg <b.rodenburg@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
+		"@companion-module/base": "~1.12.1",
 		"request": "^2.85.0"
-	},
-	"homepage": "https://github.com/bitfocus/companion-module-foscam-ptz#readme",
-	"bugs": {
-		"url": "https://github.com/bitfocus/companion-module-foscam-ptz/issues"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/bitfocus/companion-module-foscam-ptz.git"
 	},
-	"api_version": "1.0.0"
+	"packageManager": "yarn@4.9.2",
+	"scripts": {
+		"build": "companion-module-build",
+		"dev": "companion-module-build --dev",
+		"lint": "eslint . --ext .js",
+		"lint:fix": "eslint . --ext .js --fix",
+		"format": "prettier -w .",
+		"format:check": "prettier -c .",
+		"check": "companion-module-check"
+	},
+	"devDependencies": {
+		"@companion-module/tools": "^2.3.0",
+		"eslint": "8.57.0",
+		"prettier": "^3.6.2"
+	}
 }
