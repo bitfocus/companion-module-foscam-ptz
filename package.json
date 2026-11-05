@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"license": "MIT",
 	"dependencies": {
-		"@companion-module/base": "~1.12.1",
+		"@companion-module/base": "~1.15.1",
 		"request": "^2.85.0"
 	},
 	"repository": {
@@ -22,7 +22,7 @@
 		"check": "companion-module-check"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^2.8.0",
+		"@companion-module/tools": "^2.9.1",
 		"eslint": "8.57.0",
 		"prettier": "^3.6.2"
 	}
